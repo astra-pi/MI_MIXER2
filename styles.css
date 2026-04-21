@@ -244,7 +244,7 @@ img#album-cover {
 #ondas-lineal {
     width: 100%;
     height: 40px;
-    margin-top: 5px;
+    margin-top: 3px;
     margin-bottom: 16px;
     overflow: hidden;
 }
@@ -295,7 +295,7 @@ img#album-cover {
     align-items: center;
     width: 100%;
     column-gap: 24px;
-    margin-top: -20px;
+    margin-top: -18px;
     margin-bottom: -8px;
 }
 
