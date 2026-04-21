@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor Musical</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <video id="video-fondo" src="img/BackGround.mp4" loop muted autoplay playsinline style="display: block;"></video>
+
+    <div class="opciones-carga">
+        <label for="fondo-input"><i class="bi bi-image"></i> Cambiar Fondo</label>
+        <input type="file" id="fondo-input" accept="video/*, image/*">
+        
+        <label for="musica-input"><i class="bi bi-music-note-beamed"></i> Cargar Música</label>
+        <input type="file" id="musica-input" accept="audio/*, video/*, .mkv, .avi, .mov, .flv, .wmv, .m4v" multiple>
+    </div>
+
+    <div class="reproductor-musica">
+        
+        <div id="container" class="tocadiscos-container">
+            <svg id="main" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="70 30 445 380">
+                <defs>
+                    <filter id="grain">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" result="noise" />
+                        <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.08 0" in="noise" result="coloredNoise" />
+                        <feComposite operator="in" in="coloredNoise" in2="SourceAlpha" result="clippedNoise" />
+                        <feBlend in="SourceGraphic" in2="clippedNoise" mode="darken" />
+                    </filter>
+                    <filter id="bloom">
+                        <feGaussianBlur stdDeviation="1.5"/>
+                    </filter>
+                    <clipPath id="platter-clip">
+                        <circle cx="262.818" cy="218.245" r="187"/>
+                    </clipPath>
+                    <clipPath id="volume-mask">
+                        <path id="bar01" d="M559 429h18v5h-18z"/>
+                        <path id="bar02" d="M559 419h18v5h-18z"/>
+                        <path id="bar03" d="M559 409h18v5h-18z"/>
+                        <path id="bar04" d="M559 399h18v5h-18z"/>
+                        <path id="bar05" d="M559 389h18v5h-18z"/>
+                        <path id="bar06" d="M559 379h18v5h-18z"/>
+                        <path id="bar07" d="M559 369h18v5h-18z"/>
+                        <path id="bar08" d="M559 359h18v5h-18z"/>
+                        <path id="bar09" d="M559 349h18v5h-18z"/>
+                        <path id="bar10" d="M559 339h18v5h-18z"/>
+                        <path id="bar11" d="M559 329h18v5h-18z"/>
+                    </clipPath>
+                    <radialGradient id="recordplate_1_" cx="262.818" cy="218.245" r="187" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.85" stop-color="#3D3C3C"/><stop offset="0.88" stop-color="#323131"/>
+                        <stop offset="0.95" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </radialGradient>
+                    <linearGradient id="arm-weight-metal" x1="463" y1="67" x2="507" y2="67" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#111214"/><stop offset="0.18" stop-color="#595b61"/>
+                        <stop offset="0.34" stop-color="#2a2b2f"/><stop offset="0.5" stop-color="#7f8188"/>
+                        <stop offset="0.66" stop-color="#2f3035"/><stop offset="0.82" stop-color="#5e6067"/>
+                        <stop offset="1" stop-color="#101113"/>
+                    </linearGradient>
+                    <linearGradient id="arm-bridge-metal" x1="458" y1="88" x2="512" y2="88" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#0d0e10"/><stop offset="0.18" stop-color="#33353a"/>
+                        <stop offset="0.5" stop-color="#64666d"/><stop offset="0.82" stop-color="#2c2d31"/><stop offset="1" stop-color="#0b0b0d"/>
+                    </linearGradient>
+                    <linearGradient id="arm-tube-gradient" x1="475" y1="110" x2="500" y2="110" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#0d0d0f"/><stop offset="0.18" stop-color="#3a3b40"/>
+                        <stop offset="0.42" stop-color="#b3b4bb"/><stop offset="0.58" stop-color="#6d6f76"/>
+                        <stop offset="0.82" stop-color="#2c2d31"/><stop offset="1" stop-color="#09090a"/>
+                    </linearGradient>
+                    <linearGradient id="arm-joint-metal" x1="486" y1="312" x2="497" y2="312" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#111214"/><stop offset="0.2" stop-color="#46484e"/>
+                        <stop offset="0.5" stop-color="#989aa2"/><stop offset="0.78" stop-color="#3a3c41"/><stop offset="1" stop-color="#0d0e10"/>
+                    </linearGradient>
+                    <linearGradient id="cartridge-body-gradient" x1="483" y1="327" x2="503" y2="327" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#09090a"/><stop offset="0.5" stop-color="#26272b"/><stop offset="1" stop-color="#0d0e10"/>
+                    </linearGradient>
+                    <linearGradient id="stylus-tip-red" x1="468" y1="356" x2="475" y2="365" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#ff7d74"/><stop offset="0.45" stop-color="#ff3428"/><stop offset="1" stop-color="#b40000"/>
+                    </linearGradient>
+                    <radialGradient id="red-strobe" cx="160" cy="336" r="245" fx="116" fy="379" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#ff5b55" stop-opacity="0.44"/><stop offset="0.16" stop-color="#ff2323" stop-opacity="0.3"/>
+                        <stop offset="0.38" stop-color="#d20b10" stop-opacity="0.15"/><stop offset="0.72" stop-color="#850005" stop-opacity="0.05"/>
+                        <stop offset="1" stop-color="#540003" stop-opacity="0"/>
+                    </radialGradient>
+                    <radialGradient id="power-knob-outer" cx="34%" cy="28%" r="78%">
+                        <stop offset="0" stop-color="#44464c"/><stop offset="0.22" stop-color="#22242a"/>
+                        <stop offset="0.64" stop-color="#0b0c10"/><stop offset="1" stop-color="#020203"/>
+                    </radialGradient>
+                    <radialGradient id="power-knob-face" cx="42%" cy="34%" r="74%">
+                        <stop offset="0" stop-color="#2a2c31"/><stop offset="0.38" stop-color="#17191d"/>
+                        <stop offset="0.75" stop-color="#0d0e11"/><stop offset="1" stop-color="#050506"/>
+                    </radialGradient>
+                    <linearGradient id="power-knob-rim" x1="-18" y1="-18" x2="18" y2="18" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#565962"/><stop offset="0.18" stop-color="#1f2127"/>
+                        <stop offset="0.5" stop-color="#09090b"/><stop offset="0.8" stop-color="#2c2f36"/><stop offset="1" stop-color="#5a5d66"/>
+                    </linearGradient>
+                    <linearGradient id="power-knob-inner-ring" x1="-12" y1="-12" x2="12" y2="12" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#2f3238"/><stop offset="0.48" stop-color="#0d0e11"/><stop offset="1" stop-color="#1d2025"/>
+                    </linearGradient>
+                    <linearGradient id="power-knob-gloss" x1="-10" y1="-10" x2="4" y2="-2" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+                    </linearGradient>
+                    <radialGradient id="power-knob-on-red" cx="10%" cy="36%" r="90%">
+                        <stop offset="0" stop-color="#ff726a" stop-opacity="0.7"/><stop offset="0.2" stop-color="#ff3134" stop-opacity="0.38"/>
+                        <stop offset="0.55" stop-color="#9d0508" stop-opacity="0.1"/><stop offset="1" stop-color="#4d0000" stop-opacity="0"/>
+                    </radialGradient>
+                    <radialGradient id="anchor-hole_1_" cx="262.818" cy="218.245" r="5" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#666"/><stop offset=".151" stop-color="#555"/>
+                        <stop offset=".513" stop-color="#323232"/><stop offset=".809" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </radialGradient>
+                    <linearGradient id="start-button_2_" gradientUnits="userSpaceOnUse" x1="98.431" y1="367.15" x2="98.48" y2="420.083">
+                        <stop offset="0" stop-color="#3D3C3C"/><stop offset=".206" stop-color="#323131"/>
+                        <stop offset=".688" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </linearGradient>
+                    <radialGradient id="SVGID_3_" cx="485.222" cy="106.585" r="47.093" gradientUnits="userSpaceOnUse">
+                        <stop offset=".94" stop-color="#3D3C3C"/><stop offset=".953" stop-color="#323131"/>
+                        <stop offset=".981" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </radialGradient>
+                    <radialGradient id="SVGID_4_" cx="485.223" cy="106.585" r="44.149" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#3D3C3C"/><stop offset=".206" stop-color="#323131"/>
+                        <stop offset=".688" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </radialGradient>
+                    <linearGradient id="SVGID_7_" gradientUnits="userSpaceOnUse" x1="535.5" y1="373.5" x2="535.5" y2="391.017">
+                        <stop offset="0" stop-color="#3D3C3C"/><stop offset=".206" stop-color="#323131"/>
+                        <stop offset=".688" stop-color="#1C1D1D"/><stop offset="1" stop-color="#141515"/>
+                    </linearGradient>
+                </defs>
+                <g id="background"></g>
+                <g id="Record">
+                    <g id="recordplate">
+                        <circle cx="262.818" cy="218.245" r="187" fill="url(#recordplate_1_)" stroke="#000" stroke-miterlimit="10"/>
+                        <circle cx="262.818" cy="218.245" r="175.5" fill="#212226" filter="url(#grain)"/>
+                        <text x="165" y="228" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="38" fill="#55585E" letter-spacing="-1">MIXER</text>
+                    </g>
+                    <g opacity="0" id="play-state-ring">
+                        <circle cx="262.818" cy="218.245" r="175.5" fill="#f68b28" opacity="0.8"/>
+                    </g>
+                    <g id="vinyl" opacity="0">
+                        <circle id="record-edge" cx="262.818" cy="218.245" r="173" fill="#0A0A0A"/>
+                        <foreignObject x="89.818" y="45.245" width="346" height="346">
+                            <div xmlns="http://www.w3.org/1999/xhtml" class="vinyl-record">
+                                <img id="album-cover" src="" alt="" />
+                                <div class="label"><span id="mixer-text">MIXER</span></div>
+                            </div>
+                        </foreignObject>
+                    </g>
+                    <g id="shine-layer" opacity="0" style="pointer-events: none;">
+                        <foreignObject x="89.818" y="45.245" width="346" height="346">
+                            <div xmlns="http://www.w3.org/1999/xhtml" class="vinyl-shine"></div>
+                        </foreignObject>
+                    </g>
+                    <circle id="anchor-hole" cx="262.818" cy="218.245" r="5" fill="url(#anchor-hole_1_)"/>
+                </g>
+                <circle id="strobe-reflection" cx="110" cy="380" r="230" fill="url(#red-strobe)" opacity="0" clip-path="url(#platter-clip)" style="pointer-events: none; mix-blend-mode: screen;"/>
+                <g id="PowerKnob" transform="translate(110, 380)">
+                    <circle cx="0" cy="0" r="22" fill="url(#power-knob-outer)" stroke="#070709" stroke-width="1.8" style="filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.5));" />
+                    <circle cx="0" cy="0" r="19.1" fill="none" stroke="url(#power-knob-rim)" stroke-width="1.7" />
+                    <circle cx="0" cy="0" r="16.8" fill="#050507" stroke="#181a1f" stroke-width="0.8" />
+                    <circle cx="0" cy="0" r="15.2" fill="none" stroke="#2f3238" stroke-width="2.1" stroke-dasharray="0.7 2.2" stroke-linecap="round" opacity="0.92" />
+                    <circle id="power-center-off" cx="0" cy="0" r="13.9" fill="url(#power-knob-face)" stroke="url(#power-knob-inner-ring)" stroke-width="1" />
+                    <ellipse cx="-4.6" cy="-6.2" rx="8.3" ry="4.6" fill="url(#power-knob-gloss)" opacity="0.55" />
+                    <g id="power-center-on" opacity="0">
+                        <path d="M-15.8 6.1 C-13.4 1.2 -10.1 -4.5 -3.9 -9.2 C-6.5 -2.6 -7 2.3 -4.2 9.8 Z" fill="url(#power-knob-on-red)" opacity="0.95"/>
+                        <ellipse cx="-11.8" cy="1.3" rx="10.8" ry="12.5" fill="url(#power-knob-on-red)" opacity="0.44" filter="url(#bloom)"/>
+                        <circle cx="0" cy="0" r="16.8" fill="none" stroke="#ff4848" stroke-opacity="0.3" stroke-width="1.1" />
+                    </g>
+                    <circle id="power-interaction" cx="0" cy="0" r="24" fill="transparent" />
+                </g>
+                <g id="StartButton" transform="translate(0, 100)">
+                    <circle id="start-button_1_" cx="98.461" cy="400.582" r="36.154" fill="url(#start-button_2_)" stroke="#0A0A0A" stroke-width="2"/>
+                    <g id="start-stop-text" opacity=".8" fill="#999">
+                        <path d="M83.893 403.62c.352.224.855.395 1.396.395.8 0 1.27-.423 1.27-1.035 0-.558-.325-.89-1.145-1.197-.99-.36-1.603-.882-1.603-1.73 0-.944.784-1.646 1.963-1.646.612 0 1.07.145 1.333.297l-.216.64c-.19-.117-.594-.288-1.143-.288-.83 0-1.145.495-1.145.91 0 .566.37.846 1.207 1.17 1.026.395 1.54.89 1.54 1.782 0 .937-.685 1.755-2.116 1.755-.585 0-1.225-.18-1.55-.396l.207-.658zM89.33 399.172v1.044h1.133v.604H89.33v2.35c0 .54.152.846.593.846.216 0 .342-.018.46-.054l.035.604c-.153.054-.396.107-.702.107-.37 0-.666-.126-.855-.333-.215-.243-.305-.63-.305-1.143v-2.377h-.675v-.604h.675v-.81l.774-.234zM94.415 403.53c0 .377.018.746.063 1.043h-.71l-.064-.55h-.027c-.243.343-.71.648-1.333.648-.882 0-1.333-.62-1.333-1.25 0-1.054.938-1.63 2.62-1.62v-.09c0-.352-.098-1.01-.99-1-.414 0-.836.117-1.143.324l-.18-.53c.36-.226.89-.38 1.44-.38 1.333 0 1.657.91 1.657 1.774v1.63zm-.766-1.18c-.865-.018-1.846.135-1.846.98 0 .523.342.757.738.757.576 0 .945-.36 1.07-.73.028-.09.037-.18.037-.25v-.757zM95.692 401.575c0-.513-.01-.954-.036-1.36h.693l.035.865h.027c.198-.585.684-.954 1.215-.954.08 0 .144.01.216.018v.748c-.08-.02-.162-.02-.27-.02-.56 0-.955.415-1.063 1.01-.018.107-.027.243-.027.37v2.32h-.792v-2.997zM99.805 399.172v1.044h1.134v.604h-1.135v2.35c0 .54.153.846.594.846.215 0 .34-.018.458-.054l.036.604c-.153.054-.396.107-.702.107-.37 0-.666-.126-.855-.333-.216-.243-.306-.63-.306-1.143v-2.377h-.674v-.604h.675v-.81l.775-.234zM103.07 404.925l2.503-6.527h.62l-2.52 6.527h-.602zM108.66 403.62c.352.224.855.395 1.396.395.8 0 1.27-.423 1.27-1.035 0-.558-.324-.89-1.144-1.197-.99-.36-1.603-.882-1.603-1.73 0-.944.783-1.646 1.962-1.646.612 0 1.07.145 1.333.297l-.216.64c-.19-.117-.595-.288-1.144-.288-.83 0-1.144.495-1.144.91 0 .566.37.846 1.207 1.17 1.025.395 1.538.89 1.538 1.782 0 .937-.684 1.755-2.115 1.755-.585 0-1.225-.18-1.55-.396l.207-.658zM114.097 399.172v1.044h1.134v.604h-1.133v2.35c0 .54.153.846.594.846.217 0 .343-.018.46-.054l.036.604c-.153.054-.396.107-.702.107-.37 0-.666-.126-.855-.333-.217-.243-.307-.63-.307-1.143v-2.377h-.675v-.604h.675v-.81l.774-.234zM120.01 402.358c0 1.61-1.124 2.313-2.17 2.313-1.17 0-2.087-.863-2.087-2.24 0-1.45.963-2.305 2.16-2.305 1.25 0 2.098.91 2.098 2.233zm-3.447.045c0 .954.54 1.675 1.314 1.675.756 0 1.323-.71 1.323-1.692 0-.738-.37-1.666-1.305-1.666-.927 0-1.332.864-1.332 1.683zM121.008 401.64c0-.56-.018-1.01-.036-1.424h.702l.045.747h.017c.315-.53.837-.837 1.55-.837 1.06 0 1.853.892 1.853 2.206 0 1.566-.963 2.34-1.99 2.34-.576 0-1.08-.252-1.34-.684h-.02v2.367h-.782v-4.716zm.784 1.16c0 .117.01.225.036.324.144.55.62.927 1.188.927.837 0 1.324-.683 1.324-1.683 0-.864-.46-1.61-1.296-1.61-.54 0-1.053.377-1.197.972-.027.098-.054.215-.054.314v.756z"/>
+                    </g>
+                    <circle id="on-light" cx="76.411" cy="401.582" r="4" opacity=".94" fill="#4d4d4d" stroke="#0A0A0A"/>
+                </g>
+                <g id="NeedleArperture">
+                    <circle cx="485.222" cy="106.585" r="47.081" fill="url(#SVGID_3_)"/>
+                    <circle cx="485.222" cy="106.585" r="44.138" fill="url(#SVGID_4_)"/>
+                    <g id="needle-arm">
+                        <path d="M485.2 54.5 L485.2 114 C 485.2 150, 515 170, 505 215 C 495 260, 491.7 270, 491.7 298.8" fill="none" stroke="#111214" stroke-width="15" stroke-linecap="round"/>
+                        <path d="M485.2 54.5 L485.2 114 C 485.2 150, 515 170, 505 215 C 495 260, 491.7 270, 491.7 298.8" fill="none" stroke="url(#arm-tube-gradient)" stroke-width="10.5" stroke-linecap="round"/>
+                        <path d="M487.7 54.5 L487.7 117 C 487.7 150, 517 170, 507 215 C 497 260, 494.2 270, 494.2 298.8" fill="none" stroke="#eceef5" stroke-opacity="0.34" stroke-width="2.8" stroke-linecap="round"/>
+                        <path d="M482.7 54.5 L482.7 117 C 482.7 150, 513 170, 503 215 C 493 260, 489.2 270, 489.2 298.8" fill="none" stroke="#0b0c0d" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round"/>
+                        <ellipse cx="485.222" cy="106.585" rx="36" ry="36" fill="#09090a" opacity="0.18"/>
+                        <circle cx="485.222" cy="106.585" r="27.6" fill="#1c1d20" opacity="0.55"/>
+                        <g transform="translate(485.222, 65) scale(0.75) translate(-485.222, -65)">
+                            <g opacity="0.98" transform="translate(0, -20)">
+                                <rect x="468.222" y="54.5" width="34" height="32" rx="6" fill="url(#arm-weight-metal)" stroke="#0d0d0e" stroke-width="1.2"/>
+                                <rect x="470.222" y="59" width="30" height="9" rx="2.2" fill="#1d1e22"/>
+                                <rect x="463.222" y="79.5" width="44" height="12" rx="4" fill="url(#arm-weight-metal)" stroke="#0d0d0e" stroke-width="1"/>
+                                <line x1="475.222" y1="55.5" x2="475.222" y2="85" stroke="#7e8087" stroke-opacity="0.45"/>
+                                <line x1="495.222" y1="55.5" x2="495.222" y2="85" stroke="#09090a" stroke-opacity="0.7"/>
+                            </g>
+                            <rect x="458.222" y="72.5" width="54" height="12" rx="4" fill="url(#arm-bridge-metal)" stroke="#0d0d0e" stroke-width="1"/>
+                        </g>
+                        <circle id="needle-folcrum-light" cx="485.222" cy="106.585" r="18.859" fill="url(#arm-weight-metal)" stroke="#0d0e10" stroke-width="1.2"/>
+                        <circle cx="485.222" cy="106.585" r="14.957" fill="url(#arm-bridge-metal)" stroke="#09090a" stroke-width="1"/>
+                        <circle cx="485.222" cy="106.585" r="10.241" fill="url(#arm-joint-metal)" stroke="#1a1b1f" stroke-width="0.8"/>
+                        <circle cx="485.222" cy="106.585" r="3.5" fill="#101114" />
+                        <rect x="486.7" y="298.8" width="10" height="17" rx="4" fill="url(#arm-joint-metal)" stroke="#0b0b0c" stroke-width="0.9"/>
+                        <rect x="486.2" y="304.4" width="11" height="4.2" rx="1.8" fill="#1a1b1f"/>
+                        <g transform="rotate(21 493 329)">
+                            <rect x="484.6" y="313.5" width="16.8" height="24.5" rx="3.2" fill="url(#cartridge-body-gradient)" stroke="#070708" stroke-width="1"/>
+                            <path d="M484.8 337.4 L501.2 337.4 L495.4 352.2 L489.2 352.2 Z" fill="#101114" stroke="#050506" stroke-width="1"/>
+                            <path d="M486.1 318.4 L499.6 318.4" stroke="#44464c" stroke-width="1" stroke-linecap="round"/>
+                            <g id="needle-head-handle">
+                                <path d="M500.8 323.6 L514.8 326" fill="none" stroke="#24262b" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M500.5 325.1 L514.2 327.2" fill="none" stroke="#6d7078" stroke-opacity="0.45" stroke-width="0.9" stroke-linecap="round"/>
+                            </g>
+                            <circle cx="492.8" cy="323.8" r="2.1" fill="#4D4D4D" class="needle-head-lights" id="needle-light1"/>
+                            <path id="needle-head_2" d="M489.3 352 L494.8 352 L493.1 361.6 L487.9 360.1 Z" fill="url(#stylus-tip-red)"/>
+                            <path d="M491.8 352.8 L494.2 352.8 L492.8 359 Z" fill="#ffaaa5" opacity="0.85"/>
+                        </g>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div class="info-volumen-container">
+            <div class="info-cancion">
+                <h1>Sin Título</h1>
+                <p>Modo</p>
+            </div>
+            
+            <div class="volumen-control-wrapper">
+                <svg id="volume-svg" viewBox="510 320 70 120">
+                    <g id="VolumeControl">
+                        <g id="volume-track">
+                            <path fill="#0F0F0F" stroke="#0F0F0F" d="M532.5 329.5h5v105h-5z"/>
+                            <path opacity=".5" fill="#09090A" stroke="#4D4D4D" d="M533.5 330v104M537 433.5h-3"/>
+                        </g>
+                        <g id="volume-knob">
+                            <path d="M553.5 388.717c0 .984-.8 1.783-1.783 1.783h-32.434c-.984 0-1.783-.8-1.783-1.783v-14.434c0-.984.8-1.783 1.783-1.783h32.434c.984 0 1.783.8 1.783 1.783v14.434z" fill="url(#SVGID_7_)" stroke="#000"/>
+                            <path fill="none" stroke="#000" stroke-width="3" d="M517 382.5h36"/>
+                            <path id="knob-light" fill="none" stroke="#4d4d4d" stroke-width="2" d="M518 383h35"/>
+                        </g>
+                        <g id="volume-light-bars" fill="#0F0F0F">
+                            <path d="M559 429h18v5h-18z"/><path d="M559 419h18v5h-18z"/><path d="M559 409h18v5h-18z"/>
+                            <path d="M559 399h18v5h-18z"/><path d="M559 389h18v5h-18z"/><path d="M559 379h18v5h-18z"/>
+                            <path d="M559 369h18v5h-18z"/><path d="M559 359h18v5h-18z"/><path d="M559 349h18v5h-18z"/>
+                            <path d="M559 339h18v5h-18z"/><path d="M559 329h18v5h-18z"/>
+                        </g>
+                        <g id="volume-light-level" clip-path="url(#volume-mask)">
+                            <path id="light-level" fill="#ff0000" d="M559 329h18v105h-18z"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <audio id="cancion"></audio>
+
+        <canvas id="ondas-lineal"></canvas>
+
+        <div class="progreso-container">
+            <span id="tiempo-actual">0:00</span>
+            <input type="range" id="progreso" value="0" min="0" step="1" disabled>
+            <span id="tiempo-total">0:00</span>
+        </div>
+
+        <div class="controles">
+            <div class="grupo-izq">
+                <button class="favorito sin-musica">
+                    <span id="iconoFavorito" style="width: 2.2rem; height: 2.2rem; background-color: currentColor; -webkit-mask: url('img/mixer.png') no-repeat center / contain; mask: url('img/mixer.png') no-repeat center / contain; display: inline-block;"></span>
+                </button>
+                <button class="atras sin-musica"><i class="bi bi-skip-start-fill"></i></button>
+            </div>
+
+            <button class="boton-reproducir-pausar">
+                <i id="iconoControl" class="bi bi-play-fill"></i>
+            </button>
+
+            <div class="grupo-der">
+                <button class="adelante sin-musica"><i class="bi bi-skip-end-fill"></i></button>
+                <button class="lista sin-musica">
+                    <span style="width: 2.2rem; height: 2.2rem; background-color: currentColor; -webkit-mask: url('img/playlist.png') no-repeat center / contain; mask: url('img/playlist.png') no-repeat center / contain; display: inline-block;"></span>
+                </button>
+            </div>
+        </div>
+
+        <div class="playlist" id="playlist-panel" style="display: none;">
+            <ul id="playlist-container"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/utils/Draggable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
