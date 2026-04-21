@@ -108,7 +108,7 @@ body::before {
 }
 svg#main {
     width: 100%;
-    max-height: 230px; /* Ajuste para mantener proporción dentro de la tarjeta de 360px */
+    max-height: 230px;
     display: block;
     margin-top: -8px;
 }
@@ -199,7 +199,7 @@ img#album-cover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* Alineado a la izquierda para acomodar volumen a la derecha */
+    align-items: flex-start;
     overflow: hidden;
 }
 
@@ -241,20 +241,20 @@ img#album-cover {
     overflow: visible;
 }
 
-/* Resto de tu UI original */
 #ondas-lineal {
     width: 100%;
     height: 40px;
     margin-top: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     overflow: hidden;
 }
 
 .progreso-container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    width: 100%;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: 25px;
@@ -263,7 +263,9 @@ img#album-cover {
 #progreso {
     appearance: none;
     -webkit-appearance: none;
-    flex: 1;
+    width: 100%;
+    order: -1;
+    margin-bottom: 8px;
     height: 4px;
     background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
@@ -293,8 +295,8 @@ img#album-cover {
     align-items: center;
     width: 100%;
     column-gap: 24px;
-    margin-top: -6px;    /* <-- Aumenta el espacio ARRIBA (separándolos de la barra de progreso) */
-    margin-bottom: -6px; /* <-- Aumenta el espacio ABAJO (separándolos del borde de la tarjeta) */
+    margin-top: -20px;
+    margin-bottom: -8px;
 }
 
 .controles .grupo-izq,
