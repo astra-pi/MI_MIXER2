@@ -110,10 +110,10 @@ class Tocadiscos {
         this.tweens.vinyl = new TimelineMax({repeat:-1, paused: true});
         this.tweens.vinyl.to([this.actors.vinyl, '#recordplate'],3,{svgOrigin: '262.818 218.245', rotation: '+=360', ease: Linear.easeNone });
 
-        this.tweens.volumeKnob = TweenMax.fromTo(this.actors.volumeKnob, 1, 
-                                                 {y: (this.actors.volumeTrack.getBBox().height / 2)}, 
+        this.tweens.volumeKnob = TweenMax.fromTo(this.actors.volumeKnob, 1,
+                                                 {y: (this.actors.volumeTrack.getBBox().height / 2)},
                                                  {y: -1*(this.actors.volumeTrack.getBBox().height / 2), ease: Linear.easeNone, paused: true });
-        this.tweens.volumeLightLevel = TweenMax.fromTo(this.actors.volumeLightLevel, 1, 
+        this.tweens.volumeLightLevel = TweenMax.fromTo(this.actors.volumeLightLevel, 1,
                                                        {scaleY: 0.0, transformOrigin: '50% 100%' }, {scaleY: 1, paused: true, transformOrigin: '50% 100%', ease: Linear.easeNone });
 
         this.draggables.volumeKnob = Draggable.create(this.actors.volumeKnob, {
@@ -230,7 +230,7 @@ class Tocadiscos {
         if(val < 0) val = 0;
         if(val > 100) val = 100;
         TweenMax.to(this.actors.needleArm, 1, {
-            rotation:val, svgOrigin: '485.222 106.585', ease: Linear.easeNone, 
+            rotation:val, svgOrigin: '485.222 106.585', ease: Linear.easeNone,
             onUpdate: this._needleUpdate, onUpdateParams:["{self}", this]
         });
     }
