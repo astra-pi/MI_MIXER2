@@ -70,13 +70,14 @@ body::before {
     transition: color 0.3s, -webkit-text-stroke 0.3s;
 }
 
-.opciones-carga label:hover {
+/* Estado activo para toque en móvil (y click en PC) - se quita instantáneamente al soltar */
+.opciones-carga label:active {
     border-color: #e67e22;
     color: #e67e22;
-    transform: scale(1.03);
+    transform: scale(0.96);
 }
 
-.opciones-carga label:hover i {
+.opciones-carga label:active i {
     color: #e67e22;
     -webkit-text-stroke: 1px #e67e22;
 }
