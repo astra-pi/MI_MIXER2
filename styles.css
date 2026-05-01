@@ -12,9 +12,8 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-height: 100vh;
     align-items: center;
-    height: 100vh; 
-    height: 100dvh; 
     overflow: hidden;
     background-color: #000;
     gap: 15px;
@@ -112,11 +111,6 @@ svg#main {
     max-height: 230px;
     display: block;
     margin-top: -8px;
-}
-
-/* Permitir arrastres fluidos sin desplazar la pantalla en móvil */
-svg#main, .volumen-control-wrapper, #progreso, .vinyl-record, #volume-svg, .tocadiscos-container {
-    touch-action: none;
 }
 
 #StartButton, #vinyl { cursor: pointer; }
@@ -469,42 +463,29 @@ img#album-cover {
    ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
-        display: flex;
-        flex-direction: row !important; 
-        flex-wrap: nowrap; 
-        justify-content: center;
-        width: 95%;
-        max-width: 360px;
+        flex-direction: column;
         gap: 12px;
     }
-    .opciones-carga label {
-        flex: 1; 
-        justify-content: center;
-        padding: 10px 12px; /* Mayor tamaño igual a PC */
-        font-size: 0.92rem; /* Mayor fuente igual a PC */
-        white-space: nowrap; 
-    }
     .reproductor-musica {
-        width: 95%;
+        width: 90%;
         max-width: 360px;
-        padding: 30px; /* Igual que en PC para conservar el marco */
-        margin: 0; 
+        padding: 20px;
     }
     .controles {
-        column-gap: 15px;
+        column-gap: 12px;
     }
     .controles .grupo-izq button,
     .controles .grupo-der button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.6rem;
+        width: 38px;
+        height: 38px;
+        font-size: 1.5rem;
     }
     .controles .boton-reproducir-pausar {
-        width: 48px;
-        height: 48px;
-        font-size: 1.9rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1.8rem;
     }
     svg#main {
-        max-height: 210px;
+        max-height: 200px;
     }
 }
