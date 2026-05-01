@@ -23,11 +23,15 @@ let fondoPersonalizadoURL = 'img/BackGround.mp4';
 let esFondoPersonalizadoVideo = true;
 let currentFondoAplicado = 'img/BackGround.mp4';
 
+// Rastreador estricto para no reiniciar la música por accidente
+let currentAudioSrc = '';
+
 let audioCtx, analyser, dataArray;
 let picosArray = [];
 let smoothedMagnitudes = [];
 let isAudioSetup = false;
 let isDragging = false;
+let ultimaSincronizacion = 0; 
 
 const canvasOndas = document.getElementById('ondas-lineal');
 const ctxOndas = canvasOndas.getContext('2d');
@@ -157,19 +161,29 @@ class Tocadiscos {
     }
 
     _setupListeners() {
-        this.actors.startButton.addEventListener('click', () => {
+        const togglePlay = (e) => {
+            if (e && e.type === 'touchstart') e.preventDefault();
             if(!this.POWER_ON) return;
             if(cancion.paused) reproducirCancion();
             else pausarCancion();
-        });
+        };
 
-        const pauseScratch = () => { if(cancion.src) this._pauseRecordScratch(); };
+        this.actors.startButton.addEventListener('click', togglePlay);
+        this.actors.startButton.addEventListener('touchstart', togglePlay, {passive: false});
+
+        const pauseScratch = (e) => { if(cancion.src) this._pauseRecordScratch(); };
         const resumeScratch = () => this._resumeRecordScratch();
         
         this.actors.record.addEventListener('pointerdown', pauseScratch);
-        if (this.actors.vinylSurface) this.actors.vinylSurface.addEventListener('pointerdown', pauseScratch);
+        this.actors.record.addEventListener('touchstart', pauseScratch, {passive: true});
+        if (this.actors.vinylSurface) {
+            this.actors.vinylSurface.addEventListener('pointerdown', pauseScratch);
+            this.actors.vinylSurface.addEventListener('touchstart', pauseScratch, {passive: true});
+        }
         document.addEventListener('pointerup', resumeScratch);
+        document.addEventListener('touchend', resumeScratch);
         document.addEventListener('pointercancel', resumeScratch);
+        document.addEventListener('touchcancel', resumeScratch);
     }
 
     _pauseRecordScratch() {
@@ -206,7 +220,14 @@ class Tocadiscos {
         this.tweens.vinyl.resume();
         TweenMax.set(this.actors.startButtonLight, {fill: SG_COLOR_ON});
         TweenMax.to(this.actors.recordPlateLight, 1.4, {autoAlpha: 1, delay: 0.25});
-        if(this.NEEDLE_STATE === 0) this.loadNeedle();
+        
+        // Baja incondicionalmente la aguja al lugar correcto sin importar su estado anterior
+        if (!this.needleDrag && !this.recordScratch) {
+            let percent = cancion.duration ? (cancion.currentTime / cancion.duration) * 100 : 0;
+            if (isNaN(percent)) percent = 0;
+            let targetRot = this.START_DEG + this.NEEDLE_SWINGDOW * (percent / 100);
+            this._moveNeedleTo(targetRot);
+        }
     }
 
     pauseTurntable() {
@@ -231,7 +252,8 @@ class Tocadiscos {
         if(val > 100) val = 100;
         TweenMax.to(this.actors.needleArm, 1, {
             rotation:val, svgOrigin: '485.222 106.585', ease: Linear.easeNone,
-            onUpdate: this._needleUpdate, onUpdateParams:["{self}", this]
+            onUpdate: this._needleUpdate, onUpdateParams:["{self}", this],
+            overwrite: "auto" // Previene atascos en las animaciones de GSAP
         });
     }
 
@@ -488,7 +510,7 @@ document.getElementById('musica-input').addEventListener('change', async functio
     if (fuePrimeraCarga && canciones.length > 0) {
         indiceCancionActual = 0;
         actualizarInfoCancion();
-        setTimeout(() => reproducirCancion(), 150);
+        reproducirCancion(); // Llamada directa sin delay (garantiza el autoreproductor en móvil)
     }
 });
 
@@ -525,7 +547,13 @@ function actualizarInfoCancion(){
         const actual = canciones[indiceCancionActual];
         tituloCancion.textContent = actual.titulo;
         nombreArtista.textContent = actual.nombre === 'sin artista' ? 'Archivo local' : actual.nombre;
-        cancion.src = actual.fuente;
+        
+        // Rastreador estricto: Protege el reseteo abrupto del audio causado por las cargas asíncronas
+        if (currentAudioSrc !== actual.fuente) {
+            cancion.src = actual.fuente;
+            currentAudioSrc = actual.fuente;
+            tocadiscos.hangUpNeedle();
+        }
         
         // Integrar carátula al tocadiscos
         const albumCover = document.getElementById('album-cover');
@@ -544,7 +572,6 @@ function actualizarInfoCancion(){
         actualizarColorProgreso();
 
         tocadiscos.encender();
-        tocadiscos.loadNeedle();
     }
 }
 
@@ -565,8 +592,11 @@ cancion.addEventListener('timeupdate', () => {
 
         const actual = canciones[indiceCancionActual];
         if (actual && actual.tipo.startsWith('video/') && currentFondoAplicado === actual.fuente) {
-            if (Math.abs(videoFondo.currentTime - cancion.currentTime) > 0.3) {
+            
+            const ahora = Date.now();
+            if (Math.abs(videoFondo.currentTime - cancion.currentTime) > 0.8 && (ahora - ultimaSincronizacion > 2000)) {
                 videoFondo.currentTime = cancion.currentTime;
+                ultimaSincronizacion = ahora;
             }
         }
         actualizarColorProgreso();
