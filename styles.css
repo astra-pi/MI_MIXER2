@@ -68,6 +68,17 @@ body::before {
     transition: color 0.3s, -webkit-text-stroke 0.3s;
 }
 
+.opciones-carga label:hover {
+    border-color: #e67e22;
+    color: #e67e22;
+    transform: scale(1.03);
+}
+
+.opciones-carga label:hover i {
+    color: #e67e22;
+    -webkit-text-stroke: 1px #e67e22;
+}
+
 .opciones-carga input {
     display: none;
 }
@@ -339,6 +350,11 @@ img#album-cover {
     filter: grayscale(0.2);
 }
 
+.controles button:not(.sin-musica):hover {
+    color: #e67e22;
+    transform: translateY(-1px) scale(1.10);
+}
+
 .controles button:not(.sin-musica):active {
     transform: translateY(0) scale(0.96);
 }
@@ -352,9 +368,14 @@ img#album-cover {
     font-size: 2.0rem;
 }
 
+.controles .boton-reproducir-pausar:hover,
 .controles .boton-reproducir-pausar.reproduciendo {
     border-color: #e67e22;
     color: #e67e22;
+}
+
+.controles .boton-reproducir-pausar:not(.sin-musica):hover {
+    transform: scale(1.06);
 }
 
 .controles .boton-reproducir-pausar:not(.sin-musica):active {
@@ -391,6 +412,7 @@ img#album-cover {
 .playlist::-webkit-scrollbar { width: 8px; }
 .playlist::-webkit-scrollbar-track { background: rgba(60, 60, 60, 0.5); border-radius: 10px; }
 .playlist::-webkit-scrollbar-thumb { background: rgba(160, 160, 160, 0.8); border-radius: 10px; }
+.playlist::-webkit-scrollbar-thumb:hover { background: rgba(200, 200, 200, 1); }
 
 .playlist ul { list-style: none; }
 
@@ -406,9 +428,10 @@ img#album-cover {
     overflow: hidden;
 }
 
+.playlist li:hover { background-color: rgba(130, 130, 130, 0.2); }
 .playlist li.active { font-weight: normal; background-color: rgba(130, 130, 130, 0.35); border-left: none; }
-.playlist li.active .pl-title { color: #e67e22; }
-.playlist li.active .pl-artist { color: rgba(255, 255, 255, 0.85); }
+.playlist li:hover .pl-title, .playlist li.active .pl-title { color: #e67e22; }
+.playlist li:hover .pl-artist, .playlist li.active .pl-artist { color: rgba(255, 255, 255, 0.85); }
 
 .pl-thumb {
     width: 50px; height: 50px; background: rgba(90, 90, 90, 0.7);
@@ -442,38 +465,6 @@ img#album-cover {
 }
 
 /* ================================
-   EFECTOS HOVER (SOLO PARA PC / MOUSE)
-   ================================ */
-@media (hover: hover) {
-    .opciones-carga label:hover {
-        border-color: #e67e22;
-        color: #e67e22;
-        transform: scale(1.03);
-    }
-    .opciones-carga label:hover i {
-        color: #e67e22;
-        -webkit-text-stroke: 1px #e67e22;
-    }
-    .controles button:not(.sin-musica):hover {
-        color: #e67e22;
-        transform: translateY(-1px) scale(1.10);
-    }
-    .controles .boton-reproducir-pausar:hover {
-        border-color: #e67e22;
-        color: #e67e22;
-    }
-    .controles .boton-reproducir-pausar:not(.sin-musica):hover {
-        transform: scale(1.06);
-    }
-    .playlist::-webkit-scrollbar-thumb:hover { 
-        background: rgba(200, 200, 200, 1); 
-    }
-    .playlist li:hover { background-color: rgba(130, 130, 130, 0.2); }
-    .playlist li:hover .pl-title { color: #e67e22; }
-    .playlist li:hover .pl-artist { color: rgba(255, 255, 255, 0.85); }
-}
-
-/* ================================
    ADAPTACIÓN MÓVIL
    ================================ */
 @media (max-width: 600px) {
@@ -501,8 +492,8 @@ img#album-cover {
     }
     .controles {
         column-gap: 15px;
-        margin-top: 0; 
-        margin-bottom: 0; 
+        margin-top: 0; /* Descomprime verticalmente arriba */
+        margin-bottom: 0; /* Descomprime verticalmente abajo */
     }
     .controles .grupo-izq button,
     .controles .grupo-der button {
@@ -516,7 +507,7 @@ img#album-cover {
         font-size: 2rem;
     }
     svg#main {
-        max-height: 260px; 
-        margin-top: 0; 
+        max-height: 260px; /* Deja crecer al tocadiscos */
+        margin-top: 0; /* Quita el margen negativo de PC */
     }
 }
