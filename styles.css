@@ -3,7 +3,7 @@
 
 :root {
     /* Ajusta este valor para aumentar o reducir el tiempo que dura el efecto al soltar el botón */
-    --tiempo-efecto: 1s;
+    --tiempo-efecto: 0.8s;
 }
 
 * {
@@ -498,11 +498,13 @@ img#album-cover {
     .playlist li:hover .pl-artist { color: rgba(255, 255, 255, 0.85); }
 }
 
+/* AQUÍ ESTÁN LAS MODIFICACIONES SOLO PARA MÓVIL */
 @media (max-width: 600px) {
     .opciones-carga {
         width: 95%;
         max-width: 360px;
         gap: 12px;
+        flex-shrink: 0; /* Evita que los botones se encojan en vertical */
     }
     .opciones-carga label {
         flex: 1; 
@@ -513,8 +515,10 @@ img#album-cover {
     .reproductor-musica {
         width: 95%;
         max-width: 360px;
+        flex-shrink: 0; /* Evita que todo el reproductor se comprima en pantallas cortas */
     }
     svg#main {
         overflow: visible; 
+        max-height: none; /* Elimina la restricción de altura que lo hacía ver pequeño en ancho */
     }
 }
