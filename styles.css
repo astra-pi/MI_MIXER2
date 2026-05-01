@@ -12,8 +12,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 100dvh;
     align-items: center;
+    height: 100vh; /* Fallback para navegadores antiguos */
+    height: 100dvh; /* Usa el 100% de la pantalla descontando la barra de navegación */
     overflow: hidden;
     background-color: #000;
     gap: 15px;
@@ -468,19 +469,26 @@ img#album-cover {
    ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
-        flex-direction: row;
+        display: flex;
+        flex-direction: row !important; /* Fuerza sí o sí la fila */
+        flex-wrap: nowrap; /* Evita que se salten a la siguiente línea */
         justify-content: center;
+        width: 90%;
+        max-width: 360px;
         gap: 10px;
-        width: 100%;
     }
     .opciones-carga label {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        flex: 1; /* Reparte el ancho exacto al 50% para cada botón */
+        justify-content: center;
+        padding: 10px 5px;
+        font-size: 0.8rem;
+        white-space: nowrap; /* Evita que el texto de adentro se rompa */
     }
     .reproductor-musica {
-        width: 92%;
+        width: 90%;
         max-width: 360px;
         padding: 20px;
+        margin: 0; /* Limpia el margen para que el body lo centre */
     }
     .controles {
         column-gap: 12px;
