@@ -44,6 +44,8 @@ body::before {
     position: relative;
     z-index: 2;
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     gap: 20px;
 }
 
@@ -66,6 +68,17 @@ body::before {
     color: rgba(255, 255, 255, 0.85);
     -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.85);
     transition: color 0.3s, -webkit-text-stroke 0.3s;
+}
+
+.opciones-carga label:hover {
+    border-color: #e67e22;
+    color: #e67e22;
+    transform: scale(1.03);
+}
+
+.opciones-carga label:hover i {
+    color: #e67e22;
+    -webkit-text-stroke: 1px #e67e22;
 }
 
 .opciones-carga input {
@@ -108,7 +121,8 @@ svg#main, .volumen-control-wrapper, #progreso, .vinyl-record, #volume-svg, .toca
     touch-action: none;
 }
 
-#StartButton, #vinyl { cursor: pointer; }
+#StartButton { display: none; } /* Ocultamos el botón fantasma que se salía del SVG */
+#vinyl { cursor: pointer; }
 #volume-knob { cursor: ns-resize; }
 #needle-arm { cursor: move; }
 
@@ -442,9 +456,9 @@ img#album-cover {
 }
 
 /* ================================
-   EFECTOS HOVER (SOLO PARA PC / MOUSE)
+   EFECTOS HOVER (SOLO PARA PC / PANTALLAS > 600px)
    ================================ */
-@media (hover: hover) {
+@media (min-width: 601px) {
     .opciones-carga label:hover {
         border-color: #e67e22;
         color: #e67e22;
@@ -478,10 +492,6 @@ img#album-cover {
    ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
-        display: flex;
-        flex-direction: row !important; 
-        flex-wrap: nowrap; 
-        justify-content: center;
         width: 95%;
         max-width: 360px;
         gap: 12px;
@@ -489,34 +499,14 @@ img#album-cover {
     .opciones-carga label {
         flex: 1; 
         justify-content: center;
-        padding: 12px 10px; 
-        font-size: 0.95rem; 
+        padding: 10px 0; 
         white-space: nowrap; 
     }
     .reproductor-musica {
         width: 95%;
         max-width: 360px;
-        padding: 30px; 
-        margin: 0; 
-    }
-    .controles {
-        column-gap: 15px;
-        margin-top: 0; 
-        margin-bottom: 0; 
-    }
-    .controles .grupo-izq button,
-    .controles .grupo-der button {
-        width: 40px;
-        height: 40px;
-        font-size: 1.6rem;
-    }
-    .controles .boton-reproducir-pausar {
-        width: 52px;
-        height: 52px;
-        font-size: 2rem;
     }
     svg#main {
-        max-height: 260px; 
-        margin-top: 0; 
+        overflow: visible; 
     }
 }
