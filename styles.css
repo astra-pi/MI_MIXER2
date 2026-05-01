@@ -185,12 +185,21 @@ img#album-cover {
     box-shadow: 0 0 0 1px #000, 0 0 0 4px #1c1d21, 0 0 18px rgba(0, 0, 0, 0.9), inset 0 0 2px rgba(0, 0, 0, 0.5);
     display: flex; justify-content: center; align-items: center; overflow: hidden;
 }
-.label span {
+
+.label .mixer-text-wrapper {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     color: #9aa0a6; font-family: Arial, sans-serif; font-weight: 700;
     font-size: 25px; letter-spacing: 1.5px; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
 }
+.mixer-text-wrapper .mi, .mixer-text-wrapper .er {
+    width: 45px;
+    white-space: nowrap;
+}
+.mixer-text-wrapper .mi { text-align: right; }
+.mixer-text-wrapper .er { text-align: left; }
+.mixer-text-wrapper .x { text-align: center; }
 
 /* ================================
    INFORMACIÓN Y VOLUMEN ALINEADOS
