@@ -468,15 +468,19 @@ img#album-cover {
    ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+    }
+    .opciones-carga label {
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
     .reproductor-musica {
-        width: 90%;
+        width: 92%;
         max-width: 360px;
         padding: 20px;
-        margin: 0 auto;
     }
     .controles {
         column-gap: 12px;
