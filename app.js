@@ -460,7 +460,11 @@ function habilitarControles() {
     }
 }
 
-document.getElementById('fondo-input').addEventListener('change', function(e) {
+const inputFondo = document.getElementById('fondo-input');
+const inputMusica = document.getElementById('musica-input');
+
+inputFondo.addEventListener('change', function(e) {
+    document.querySelector('label[for="fondo-input"]').classList.remove('esperando-archivo'); // Respaldo
     const file = e.target.files[0];
     if (file) {
         fondoPersonalizadoURL = URL.createObjectURL(file);
@@ -476,7 +480,8 @@ function getFileMimeType(file) {
     return file.type || 'audio/mpeg';
 }
 
-document.getElementById('musica-input').addEventListener('change', async function(e){
+inputMusica.addEventListener('change', async function(e){
+    document.querySelector('label[for="musica-input"]').classList.remove('esperando-archivo'); // Respaldo
     const fuePrimeraCarga = canciones.length === 0;
     const files = Array.from(e.target.files);
     
@@ -492,7 +497,6 @@ document.getElementById('musica-input').addEventListener('change', async functio
             onSuccess: function(tag) {
                 if (tag.tags.artist) cancionObj.nombre = tag.tags.artist;
                 
-                // OPTIMIZACIÓN CRÍTICA: Convertir array de bytes a Blob de forma nativa en lugar de usar un bucle masivo
                 if (tag.tags.picture) {
                     const { data, format } = tag.tags.picture;
                     const blob = new Blob([new Uint8Array(data)], { type: format });
@@ -677,3 +681,27 @@ botonLista.addEventListener('click', () => {
 });
 
 aplicarFondoCorrecto();
+
+// --- LÓGICA PARA MANTENER ILUMINADO EN MÓVIL MIENTRAS SE SELECCIONA ARCHIVO ---
+const labelFondo = document.querySelector('label[for="fondo-input"]');
+const labelMusica = document.querySelector('label[for="musica-input"]');
+
+inputFondo.addEventListener('click', () => {
+    if (window.innerWidth <= 600) {
+        labelFondo.classList.add('esperando-archivo');
+        window.addEventListener('focus', function onFocus() {
+            setTimeout(() => labelFondo.classList.remove('esperando-archivo'), 300);
+            window.removeEventListener('focus', onFocus);
+        }, { once: true });
+    }
+});
+
+inputMusica.addEventListener('click', () => {
+    if (window.innerWidth <= 600) {
+        labelMusica.classList.add('esperando-archivo');
+        window.addEventListener('focus', function onFocus() {
+            setTimeout(() => labelMusica.classList.remove('esperando-archivo'), 300);
+            window.removeEventListener('focus', onFocus);
+        }, { once: true });
+    }
+});
