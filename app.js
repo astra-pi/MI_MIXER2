@@ -41,6 +41,15 @@ const colores = [
     {r: 255, g: 180, b: 90},  {r: 255, g: 100, b: 100}
 ];
 
+// Temporizador para evitar reconstruir el DOM repetidamente y causar lag
+let renderPlaylistTimer;
+function solicitarRenderizadoPlaylist() {
+    clearTimeout(renderPlaylistTimer);
+    renderPlaylistTimer = setTimeout(() => {
+        actualizarPlaylist();
+    }, 150);
+}
+
 // ==========================================
 // LÓGICA DEL TOCADISCOS INTEGRADA
 // ==========================================
@@ -220,7 +229,6 @@ class Tocadiscos {
         TweenMax.set(this.actors.startButtonLight, {fill: SG_COLOR_ON});
         TweenMax.to(this.actors.recordPlateLight, 1.4, {autoAlpha: 1, delay: 0.25});
         
-        // Baja incondicionalmente la aguja al lugar correcto sin importar su estado anterior
         if (!this.needleDrag && !this.recordScratch) {
             let percent = cancion.duration ? (cancion.currentTime / cancion.duration) * 100 : 0;
             if (isNaN(percent)) percent = 0;
@@ -252,7 +260,7 @@ class Tocadiscos {
         TweenMax.to(this.actors.needleArm, 1, {
             rotation:val, svgOrigin: '485.222 106.585', ease: Linear.easeNone,
             onUpdate: this._needleUpdate, onUpdateParams:["{self}", this],
-            overwrite: "auto" // Previene atascos en las animaciones de GSAP
+            overwrite: "auto"
         });
     }
 
@@ -483,13 +491,15 @@ document.getElementById('musica-input').addEventListener('change', async functio
         jsmediatags.read(file, {
             onSuccess: function(tag) {
                 if (tag.tags.artist) cancionObj.nombre = tag.tags.artist;
+                
+                // OPTIMIZACIÓN CRÍTICA: Convertir array de bytes a Blob de forma nativa en lugar de usar un bucle masivo
                 if (tag.tags.picture) {
                     const { data, format } = tag.tags.picture;
-                    let base64String = "";
-                    for (let i = 0; i < data.length; i++) base64String += String.fromCharCode(data[i]);
-                    cancionObj.img = `data:${format};base64,${window.btoa(base64String)}`;
+                    const blob = new Blob([new Uint8Array(data)], { type: format });
+                    cancionObj.img = URL.createObjectURL(blob);
                 }
-                actualizarPlaylist();
+                
+                solicitarRenderizadoPlaylist();
                 if (canciones[indiceCancionActual] === cancionObj) actualizarInfoCancion();
             }
         });
@@ -497,19 +507,19 @@ document.getElementById('musica-input').addEventListener('change', async functio
         const tempAudio = new Audio(cancionUrl);
         tempAudio.addEventListener('loadedmetadata', () => {
             cancionObj.duracion = formatearTiempo(tempAudio.duration);
-            actualizarPlaylist();
+            solicitarRenderizadoPlaylist();
         });
 
         canciones.push(cancionObj);
     }
 
-    actualizarPlaylist();
+    solicitarRenderizadoPlaylist();
     habilitarControles();
     
     if (fuePrimeraCarga && canciones.length > 0) {
         indiceCancionActual = 0;
         actualizarInfoCancion();
-        reproducirCancion(); // Llamada directa sin delay (garantiza el autoreproductor en móvil)
+        reproducirCancion();
     }
 });
 
@@ -547,14 +557,12 @@ function actualizarInfoCancion(){
         tituloCancion.textContent = actual.titulo;
         nombreArtista.textContent = actual.nombre === 'sin artista' ? 'Archivo local' : actual.nombre;
         
-        // Rastreador estricto: Protege el reseteo abrupto del audio causado por las cargas asíncronas
         if (currentAudioSrc !== actual.fuente) {
             cancion.src = actual.fuente;
             currentAudioSrc = actual.fuente;
             tocadiscos.hangUpNeedle();
         }
         
-        // Integrar carátula al tocadiscos
         const albumCover = document.getElementById('album-cover');
         const recordDiv = document.querySelector('.vinyl-record');
         if(actual.img) {
@@ -566,7 +574,7 @@ function actualizarInfoCancion(){
             recordDiv.classList.remove('has-cover');
         }
 
-        actualizarPlaylist();
+        solicitarRenderizadoPlaylist();
         aplicarFondoCorrecto();
         actualizarColorProgreso();
 
@@ -593,7 +601,6 @@ cancion.addEventListener('timeupdate', () => {
         if (actual && actual.tipo.startsWith('video/') && currentFondoAplicado === actual.fuente) {
             const diff = videoFondo.currentTime - cancion.currentTime;
             
-            // Sincronización suave sin saltos bruscos (evita lag en video)
             if (Math.abs(diff) > 0.3) {
                 if (Math.abs(diff) > 2) {
                     videoFondo.currentTime = cancion.currentTime;
