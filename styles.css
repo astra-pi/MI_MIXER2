@@ -341,7 +341,7 @@ img#album-cover {
     line-height: 1;
     padding: 0;
     outline: none;
-    transition: transform 0.22s ease, color 0.22s ease, opacity 0.22s ease, filter 0.22s ease;
+    transition: transform 0.22s ease, color 0.22s ease, opacity 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
 }
 
 .controles .grupo-izq button,
@@ -363,8 +363,10 @@ img#album-cover {
     filter: grayscale(0.2);
 }
 
+/* Estado activo para botones de controles al tocarlos */
 .controles button:not(.sin-musica):active {
     transform: translateY(0) scale(0.96);
+    color: #e67e22;
 }
 
 .controles .boton-reproducir-pausar {
@@ -381,8 +383,11 @@ img#album-cover {
     color: #e67e22;
 }
 
+/* Color activo para el play/pausa */
 .controles .boton-reproducir-pausar:not(.sin-musica):active {
     transform: scale(0.97);
+    border-color: #e67e22;
+    color: #e67e22;
 }
 
 .favorito.activo {
