@@ -31,7 +31,6 @@ let picosArray = [];
 let smoothedMagnitudes = [];
 let isAudioSetup = false;
 let isDragging = false;
-let ultimaSincronizacion = 0; 
 
 const canvasOndas = document.getElementById('ondas-lineal');
 const ctxOndas = canvasOndas.getContext('2d');
@@ -592,11 +591,17 @@ cancion.addEventListener('timeupdate', () => {
 
         const actual = canciones[indiceCancionActual];
         if (actual && actual.tipo.startsWith('video/') && currentFondoAplicado === actual.fuente) {
+            const diff = videoFondo.currentTime - cancion.currentTime;
             
-            const ahora = Date.now();
-            if (Math.abs(videoFondo.currentTime - cancion.currentTime) > 0.8 && (ahora - ultimaSincronizacion > 2000)) {
-                videoFondo.currentTime = cancion.currentTime;
-                ultimaSincronizacion = ahora;
+            // Sincronización suave sin saltos bruscos (evita lag en video)
+            if (Math.abs(diff) > 0.3) {
+                if (Math.abs(diff) > 2) {
+                    videoFondo.currentTime = cancion.currentTime;
+                } else {
+                    videoFondo.playbackRate = diff > 0 ? 0.9 : 1.1;
+                }
+            } else {
+                if (videoFondo.playbackRate !== 1) videoFondo.playbackRate = 1;
             }
         }
         actualizarColorProgreso();
