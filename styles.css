@@ -44,6 +44,8 @@ body::before {
     position: relative;
     z-index: 2;
     display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
     gap: 20px;
 }
 
@@ -66,17 +68,6 @@ body::before {
     color: rgba(255, 255, 255, 0.85);
     -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.85);
     transition: color 0.3s, -webkit-text-stroke 0.3s;
-}
-
-.opciones-carga label:hover {
-    border-color: #e67e22;
-    color: #e67e22;
-    transform: scale(1.03);
-}
-
-.opciones-carga label:hover i {
-    color: #e67e22;
-    -webkit-text-stroke: 1px #e67e22;
 }
 
 .opciones-carga input {
@@ -489,48 +480,21 @@ img#album-cover {
    ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
-        display: flex !important;
-        flex-direction: row !important; 
-        flex-wrap: nowrap !important; 
-        justify-content: space-between !important;
-        width: 90% !important;
-        max-width: 360px !important;
-        gap: 10px !important;
+        width: 95%;
+        max-width: 360px;
+        gap: 12px;
     }
     .opciones-carga label {
-        flex: 1 1 0 !important; /* Fuerza a que tomen 50% exacto */
-        min-width: 0 !important; /* El secreto para que flex no desborde con textos largos */
-        justify-content: center !important;
-        padding: 12px 5px !important; 
-        font-size: 0.85rem !important; /* Ligeramente menor para asegurar el ajuste */
-        white-space: nowrap !important; 
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        flex: 1; 
+        justify-content: center;
+        padding: 10px 0; 
+        white-space: nowrap; 
     }
     .reproductor-musica {
-        width: 90% !important;
-        max-width: 360px !important;
-        padding: 30px !important; 
-        margin: 0 !important; 
-    }
-    .controles {
-        column-gap: 15px !important;
-        margin-top: 0 !important; 
-        margin-bottom: 0 !important; 
-    }
-    .controles .grupo-izq button,
-    .controles .grupo-der button {
-        width: 40px !important;
-        height: 40px !important;
-        font-size: 1.6rem !important;
-    }
-    .controles .boton-reproducir-pausar {
-        width: 52px !important;
-        height: 52px !important;
-        font-size: 2rem !important;
+        width: 95%;
+        max-width: 360px;
     }
     svg#main {
-        max-height: 260px !important; 
-        margin-top: 0 !important; 
+        overflow: visible; /* Evita que el eje del brazo se corte */
     }
 }
