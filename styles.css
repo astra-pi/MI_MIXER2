@@ -1,6 +1,11 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+:root {
+    /* Ajusta este valor para aumentar o reducir el tiempo que dura el efecto al soltar el botón */
+    --tiempo-efecto: 0.5s;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -61,25 +66,26 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: background 0.3s, color 0.3s, border-color 0.3s, transform 0.2s ease;
+    transition: background var(--tiempo-efecto), color var(--tiempo-efecto), border-color var(--tiempo-efecto), transform var(--tiempo-efecto) ease;
 }
 
 .opciones-carga label i {
     color: rgba(255, 255, 255, 0.85);
     -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.85);
-    transition: color 0.3s, -webkit-text-stroke 0.3s;
+    transition: color var(--tiempo-efecto), -webkit-text-stroke var(--tiempo-efecto);
 }
 
-/* Estado activo para toque en móvil (y click en PC) - se quita instantáneamente al soltar */
 .opciones-carga label:active {
     border-color: #e67e22;
     color: #e67e22;
     transform: scale(0.96);
+    transition: 0.05s;
 }
 
 .opciones-carga label:active i {
     color: #e67e22;
     -webkit-text-stroke: 1px #e67e22;
+    transition: 0.05s;
 }
 
 .opciones-carga input {
@@ -101,9 +107,6 @@ body::before {
     -webkit-backdrop-filter: blur(2px);
 }
 
-/* ================================
-   TOCADISCOS (CSS INTEGRADO)
-   ================================ */
 .tocadiscos-container {
     width: 100%;
     display: flex;
@@ -117,12 +120,11 @@ svg#main {
     margin-top: -8px;
 }
 
-/* Permitir arrastres fluidos sin desplazar la pantalla en móvil */
 svg#main, .volumen-control-wrapper, #progreso, .vinyl-record, #volume-svg, .tocadiscos-container {
     touch-action: none;
 }
 
-#StartButton { display: none; } /* Ocultamos el botón fantasma que se salía del SVG */
+#StartButton { display: none; }
 #vinyl { cursor: pointer; }
 #volume-knob { cursor: ns-resize; }
 #needle-arm { cursor: move; }
@@ -202,9 +204,6 @@ img#album-cover {
 .mixer-text-wrapper .er { text-align: left; }
 .mixer-text-wrapper .x { text-align: center; }
 
-/* ================================
-   INFORMACIÓN Y VOLUMEN ALINEADOS
-   ================================ */
 .info-volumen-container {
     display: flex;
     align-items: center;
@@ -341,7 +340,7 @@ img#album-cover {
     line-height: 1;
     padding: 0;
     outline: none;
-    transition: transform 0.22s ease, color 0.22s ease, opacity 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
+    transition: transform var(--tiempo-efecto) ease, color var(--tiempo-efecto) ease, opacity var(--tiempo-efecto) ease, filter var(--tiempo-efecto) ease, border-color var(--tiempo-efecto) ease;
 }
 
 .controles .grupo-izq button,
@@ -363,10 +362,10 @@ img#album-cover {
     filter: grayscale(0.2);
 }
 
-/* Estado activo para botones de controles al tocarlos */
 .controles button:not(.sin-musica):active {
     transform: translateY(0) scale(0.96);
     color: #e67e22;
+    transition: 0.05s;
 }
 
 .controles .boton-reproducir-pausar {
@@ -383,11 +382,11 @@ img#album-cover {
     color: #e67e22;
 }
 
-/* Color activo para el play/pausa */
 .controles .boton-reproducir-pausar:not(.sin-musica):active {
     transform: scale(0.97);
     border-color: #e67e22;
     color: #e67e22;
+    transition: 0.05s;
 }
 
 .favorito.activo {
@@ -470,9 +469,6 @@ img#album-cover {
     cursor: grab; color: rgba(255, 255, 255, 0.4); font-size: 1rem; padding: 5px 5px 5px 2px;
 }
 
-/* ================================
-   EFECTOS HOVER (SOLO PARA PC / PANTALLAS > 600px)
-   ================================ */
 @media (min-width: 601px) {
     .opciones-carga label:hover {
         border-color: #e67e22;
@@ -502,9 +498,6 @@ img#album-cover {
     .playlist li:hover .pl-artist { color: rgba(255, 255, 255, 0.85); }
 }
 
-/* ================================
-   ADAPTACIÓN MÓVIL
-   ================================ */
 @media (max-width: 600px) {
     .opciones-carga {
         width: 95%;
